@@ -3,7 +3,7 @@ import "./featured.css";
 
 const Featured = () => {
 
-const {data,loading,error} = useFecth("/hotels/countByCity?cities=berlin,madrid,london")
+const {data,loading} = useFecth("/hotels/countByCity?cities=berlin,madrid,london")
 
   return (
     <div className="featured">
