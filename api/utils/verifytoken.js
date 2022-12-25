@@ -12,3 +12,21 @@ export const verifyToken = (req,res,next)=>{
        next()
     })
 }
+export const verifyuser = (req,res,next)=>{
+    verifyToken(req,res,next,()=>{
+        if(req.user.id === req.param.id || req.user.isAdmin){
+            next()
+        }else{
+            if(err) return next(cE(403,"you are not authorized"))
+        }
+    })
+}
+export const verifyAdmin = (req,res,next)=>{
+    verifyToken(req,res,next,()=>{
+        if(req.user.isAdmin){
+            next()
+        }else{
+            if(err) return next(cE(403,"you are not authorized"))
+        }
+    })
+}

@@ -16,7 +16,7 @@ try{
     })
     await newUser.save()
     res.status(200).send("Users has been created")
-}catch{
+}catch(err){
     next(err)
 }
 };
