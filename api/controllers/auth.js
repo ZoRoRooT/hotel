@@ -1,0 +1,38 @@
+import User from "../models/user.js"
+import bcrypt from "bcryptjs"
+import { cE} from "../utils/error.js"
+
+export const register = async (req,res,next)=>{
+try{
+    const salt = bcrypt.genSaltSync(10);
+    const hash= bcrypt.hashSync(req.body.password,salt)
+
+
+    const newUser = new User({
+        username:req.body.username,
+        email:req.body.email,
+        password:hash,
+    })
+    await newUser.save()
+    res.status(200).send("Users has been created")
+}catch{
+    next(err)
+}
+};
+export const login = async (req,res,next)=>{
+try{
+   const user = await User.findOne({username: req.body.username});
+   if(!user) return next(cE(404,"User Not Found"));
+   
+   const isPasswordCorrect = await bcrypt.compare(
+    req.body.password,
+    user.password
+    );
+   if(!isPasswordCorrect)
+    return next(cE(404,"Wrong Username or Password"));
+   const {password,isAdmin,...otherDetails}=user._doc
+    res.status(200).send({...otherDetails})
+}catch{
+    next (err)
+}
+};
